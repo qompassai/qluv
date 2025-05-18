@@ -1,4 +1,4 @@
-. ~/.luaver/luaver
+. ~/.qluv/qluv
 
 # Confirming default lua version
 version_string=$(lua -v)

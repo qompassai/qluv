@@ -5,14 +5,14 @@
 # Qompass AI Lua Version Manager
 
 __qluv_VERSION="1.0.0"
-__luaver_LUAVER_DIR="${HOME}/.qluv" 
-__qluv_SRC_DIR="${__qluv_LUAVER_DIR}/src" 
-__qluv_LUA_DIR="${__luaver_LUAVER_DIR}/lua" 
-__qluv_LUA_DEFAULT_FILE="${__luaver_LUAVER_DIR}/DEFAULT_LUA"
-__qluv_LUAJIT_DIR="${__luaver_LUAVER_DIR}/luajit"                       
-__qluv_LUAJIT_DEFAULT_FILE="${__qluv_LUAVER_DIR}/DEFAULT_LUAJIT" 
-__qluv_LUAROCKS_DIR="${__qluv_LUAVER_DIR}/luarocks" 
-__qluv_LUAROCKS_DEFAULT_FILE="${__qluv_LUAVER_DIR}/DEFAULT_LUAROCKS"
+__qluv_QLUV_DIR="${HOME}/.qluv" 
+__qluv_SRC_DIR="${__qluv_QLUV_DIR}/src" 
+__qluv_LUA_DIR="${__qluv_QLUV_DIR}/lua" 
+__qluv_LUA_DEFAULT_FILE="${__qluv_QLUV_DIR}/DEFAULT_LUA"
+__qluv_LUAJIT_DIR="${__qluv_QLUV_DIR}/luajit"                       
+__qluv_LUAJIT_DEFAULT_FILE="${__qluv_QLUV_DIR}/DEFAULT_LUAJIT" 
+__qluv_LUAROCKS_DIR="${__qluv_QLUV_DIR}/luarocks" 
+__qluv_LUAROCKS_DEFAULT_FILE="${__qluv_QLUV_DIR}/DEFAULT_LUAROCKS"
 
 __qluv_present_dir=""
 __qluv_verbose=0
@@ -20,79 +20,79 @@ __qluv_verbose=0
 __qluv_error()
 {
     printf "%b\n" "${1}" 1>&2
-    __luaver_exec_command cd "${__luaver_present_dir}"
+    __qluv_exec_command cd "${__qluv_present_dir}"
     kill -INT $$
 }
-__luaver_print()
+__qluv_print()
 {
-    if [ ! $__luaver_verbose = 0 ]
+    if [ ! $__qluv_verbose = 0 ]
     then
         tput bold
         printf "==>  %b\n" "${1}"
         tput sgr0
     fi
 }
-__luaver_print_formatted()
+__qluv_print_formatted()
 {
     printf "%b\n" "${1}"
 }
-__luaver_exec_command()
+__qluv_exec_command()
 {
     if ! "${@}"
     then
-        __luaver_error "Unable to execute the following command:\n${1}\nExiting"
+        __qluv_error "Unable to execute the following command:\n${1}\nExiting"
     fi
 }
 
-__luaver_init()
+__qluv_init()
 {
-    __luaver_present_dir=$(pwd)
+    __qluv_present_dir=$(pwd)
 
-    if [ ! -e "${__luaver_LUAVER_DIR}" ]
+    if [ ! -e "${__qluv_QLUVDIR}" ]
     then
-        __luaver_exec_command mkdir "${__luaver_LUAVER_DIR}"
+        __qluv_exec_command mkdir "${__qluv_QLUV_DIR}"
     fi
 
-    if [ ! -e "${__luaver_SRC_DIR}" ]
+    if [ ! -e "${__qluv_SRC_DIR}" ]
     then
-        __luaver_exec_command mkdir "${__luaver_SRC_DIR}"
+        __qluv_exec_command mkdir "${__qluv_SRC_DIR}"
     fi
-    if [ ! -e "${__luaver_LUA_DIR}" ]
+    if [ ! -e "${__qluv_LUA_DIR}" ]
     then
-        __luaver_exec_command mkdir "${__luaver_LUA_DIR}"
+        __qluv_exec_command mkdir "${__qluv_LUA_DIR}"
     fi
-    if [ ! -e "${__luaver_LUAJIT_DIR}" ]
+    if [ ! -e "${__qluv_LUAJIT_DIR}" ]
     then
-        __luaver_exec_command mkdir "${__luaver_LUAJIT_DIR}"
+        __qluv_exec_command mkdir "${__qluv_LUAJIT_DIR}"
     fi
-    if [ ! -e "${__luaver_LUAROCKS_DIR}" ]
+    if [ ! -e "${__qluv_LUAROCKS_DIR}" ]
     then
-        __luaver_exec_command mkdir "${__luaver_LUAROCKS_DIR}"
+        __qluv_exec_command mkdir "${__qluv_LUAROCKS_DIR}"
     fi
-    if [ -f "${__luaver_LUA_DEFAULT_FILE}" ]
+    if [ -f "${__qluv_LUA_DEFAULT_FILE}" ]
     then
         local lua_version
-        lua_version=$(cat "${__luaver_LUA_DEFAULT_FILE}")
-        __luaver_use_lua "${lua_version}"
+        lua_version=$(cat "${__qluv_LUA_DEFAULT_FILE}")
+        __qluv_use_lua "${lua_version}"
     fi
-    if [ -f "${__luaver_LUAJIT_DEFAULT_FILE}" ]
+    if [ -f "${__qluv_LUAJIT_DEFAULT_FILE}" ]
     then
         local luajit_version
-        luajit_version=$(cat "${__luaver_LUAJIT_DEFAULT_FILE}")
-        __luaver_use_luajit "${luajit_version}"
+        luajit_version=$(cat "${__qluv_LUAJIT_DEFAULT_FILE}")
+        __qluv_use_luajit "${luajit_version}"
     fi
-    if [ -f "${__luaver_LUAROCKS_DEFAULT_FILE}" ]
+    if [ -f "${__qluv_LUAROCKS_DEFAULT_FILE}" ]
     then
         local luarocks_version
-        luarocks_version=$(cat "${__luaver_LUAROCKS_DEFAULT_FILE}")
-        __luaver_use_luarocks "${luarocks_version}"
+        luarocks_version=$(cat "${__qluv_LUAROCKS_DEFAULT_FILE}")
+        __qluv_use_luarocks "${luarocks_version}"
     fi
 
-    __luaver_verbose=1
+    __qluv_verbose=1
 
-    __luaver_exec_command cd "${__luaver_present_dir}"
+    __qluv_exec_command cd "${__qluv_present_dir}"
 }
-__luaver_exists()
+__qluv_exists()
 {
     local lua_path
     local luajit_path
@@ -102,7 +102,7 @@ __luaver_exists()
     luarocks_path=$(command -v luarocks)
     if [ "${1}" = "lua" ]
     then
-        if [ "${lua_path#$__luaver_LUA_DIR}" != "${lua_path}" ]
+        if [ "${lua_path#$__qluv_LUA_DIR}" != "${lua_path}" ]
         then
             return 0
         else
@@ -111,7 +111,7 @@ __luaver_exists()
     fi
     if [ "${1}" = "luajit" ]
     then
-        if [ "${luajit_path#$__luaver_LUAJIT_DIR}" != "${luajit_path}" ]
+        if [ "${luajit_path#$__qluv_LUAJIT_DIR}" != "${luajit_path}" ]
         then
             return 0
         else
@@ -120,7 +120,7 @@ __luaver_exists()
     fi
     if [ "${1}" = "luarocks" ]
     then
-        if [ "${luarocks_path#$__luaver_LUAROCKS_DIR}" != "${luarocks_path}" ]
+        if [ "${luarocks_path#$__qluv_LUAROCKS_DIR}" != "${luarocks_path}" ]
         then
             return 0
         else
@@ -131,63 +131,63 @@ __luaver_exists()
     type "${1}" > /dev/null 2>&1
 }
 
-__luaver_download()
+__qluv_download()
 {
     local url=$1
     local filename=${url##*/}
 
-    __luaver_print "Downloading from ${url}"
+    __qluv_print "Downloading from ${url}"
 
-    if __luaver_exists "wget"
+    if __qluv_exists "wget"
     then
-        __luaver_exec_command wget -O "${filename}" "${url}"
-    elif __luaver_exists "curl"
+        __qluv_exec_command wget -O "${filename}" "${url}"
+    elif __qluv_exists "curl"
     then
-        __luaver_exec_command curl -fLO "${url}"
+        __qluv_exec_command curl -fLO "${url}"
     else
-        __luaver_error "'wget' or 'curl' must be installed"
+        __qluv_error "'wget' or 'curl' must be installed"
     fi
-    __luaver_print "Download successful"
+    __qluv_print "Download successful"
 }
-__luaver_unpack()
+__qluv_unpack()
 {
-    __luaver_print "Unpacking ${1}"
+    __qluv_print "Unpacking ${1}"
 
-    if __luaver_exists "tar"
+    if __qluv_exists "tar"
     then
-        __luaver_exec_command tar xvzf "${1}"
+        __qluv_exec_command tar xvzf "${1}"
     else
-        __luaver_error "'tar' must be installed"
+        __qluv_error "'tar' must be installed"
     fi
 
-    __luaver_print "Unpack successful"
+    __qluv_print "Unpack successful"
 }
-__luaver_download_and_unpack()
+__qluv_download_and_unpack()
 {
     local unpack_dir_name=$1
     local archive_name=$2
     local url=$3
-    __luaver_print "Detecting already downloaded archives"
+    __qluv_print "Detecting already downloaded archives"
     if [ -e "${unpack_dir_name}" ]
     then
-        __luaver_print "${unpack_dir_name} has already been downloaded. Download again? [Y/n]: "
+        __qluv_print "${unpack_dir_name} has already been downloaded. Download again? [Y/n]: "
         read -r choice
         case $choice in
             [yY][eE][sS] | [yY] )
-                __luaver_exec_command rm -r "${unpack_dir_name}"
+                __qluv_exec_command rm -r "${unpack_dir_name}"
                 ;;
         esac
     fi
     if [ ! -e "${unpack_dir_name}" ]
     then
-        __luaver_print "Downloading ${unpack_dir_name}"
-        __luaver_download "${url}"
-        __luaver_print "Extracting archive"
-        __luaver_unpack "${archive_name}"
-        __luaver_exec_command rm "${archive_name}"
+        __qluv_print "Downloading ${unpack_dir_name}"
+        __qluv_download "${url}"
+        __qluv_print "Extracting archive"
+        __qluv_unpack "${archive_name}"
+        __qluv_exec_command rm "${archive_name}"
     fi
 }
-__luaver_remove_previous_paths()
+__qluv_remove_previous_paths()
 {
     local prefix=$1
     local new_path
@@ -198,30 +198,30 @@ __luaver_remove_previous_paths()
 
     export PATH=$new_path
 }
-__luaver_append_path()
+__qluv_append_path()
 {
     export PATH="${1}:${PATH}"
 }
-__luaver_uninstall()
+__qluv_uninstall()
 {
     local package_name=$1
     local package_path=$2
     local package_dir=$3
 
-    __luaver_print "Uninstalling ${package_name}"
+    __qluv_print "Uninstalling ${package_name}"
 
-    __luaver_exec_command cd "${package_path}"
+    __qluv_exec_command cd "${package_path}"
     if [ ! -e "${package_dir}" ]
     then
-        __luaver_error "${package_name} is not installed"
+        __qluv_error "${package_name} is not installed"
     fi
 
-    __luaver_exec_command rm -r "${package_dir}"
+    __qluv_exec_command rm -r "${package_dir}"
 
-    __luaver_print "Successfully uninstalled ${package_name}"
+    __qluv_print "Successfully uninstalled ${package_name}"
 }
 
-__luaver_get_platform()
+__qluv_get_platform()
 {
     case $(uname -s 2>/dev/null) in
         Linux )                    echo "linux" ;;
@@ -234,51 +234,51 @@ __luaver_get_platform()
         * )                        echo "unknown"
     esac
 }
-__luaver_get_current_lua_version()
+__qluv_get_current_lua_version()
 {
     local version
     version=$(command -v lua)
 
-    if __luaver_exists lua
+    if __qluv_exists lua
     then
-        version=${version#$__luaver_LUA_DIR/}
+        version=${version#$__qluv_LUA_DIR/}
         echo "${version%/bin/lua}"
     else
         return 1
     fi
 }
-__luaver_get_current_lua_version_short()
+__qluv_get_current_lua_version_short()
 {
     local version=""
 
-    if __luaver_exists lua
+    if __qluv_exists lua
     then
         version=$(lua -e 'print(_VERSION:sub(5))')
     fi
 
     echo "${version}"
 }
-__luaver_get_current_luajit_version()
+__qluv_get_current_luajit_version()
 {
     local version
     version=$(command -v luajit)
 
-    if __luaver_exists "luajit"
+    if __qluv_exists "luajit"
     then
-        version=${version#$__luaver_LUAJIT_DIR/}
+        version=${version#$__qluv_LUAJIT_DIR/}
         echo "${version%/bin/luajit}"
     else
         return 1
     fi
 }
-__luaver_get_current_luarocks_version()
+__qluv_get_current_luarocks_version()
 {
     local version
     version=$(command -v luarocks)
 
-    if __luaver_exists "luarocks"
+    if __qluv_exists "luarocks"
     then
-        version=${version#$__luaver_LUAROCKS_DIR/}
+        version=${version#$__qluv_LUAROCKS_DIR/}
         version=${version%/bin/luarocks}
         echo "${version%_*}"
     else
@@ -287,14 +287,14 @@ __luaver_get_current_luarocks_version()
 }
 
 # Returns the short lua version being supported by present luarocks
-__luaver_get_lua_version_by_current_luarocks()
+__qluv_get_lua_version_by_current_luarocks()
 {
     local version
     version=$(command -v luarocks)
 
-    if __luaver_exists "luarocks"
+    if __qluv_exists "luarocks"
     then
-        version=${version#$__luaver_LUAROCKS_DIR/}
+        version=${version#$__qluv_LUAROCKS_DIR/}
         version=${version%/bin/luarocks}
         echo "${version#*_}"
     else
@@ -304,8 +304,8 @@ __luaver_get_lua_version_by_current_luarocks()
 
 # Returns the content at the given URL
 # Synopsis:
-#     __luaver_get_url url
-__luaver_get_url()
+#     __qluv_get_url url
+__qluv_get_url()
 {
     if curl -V >/dev/null 2>&1
     then
@@ -318,154 +318,154 @@ __luaver_get_url()
 # End of Helper functions
 ###############################################################################
 
-__luaver_usage()
+__qluv_usage()
 {
-    __luaver_print_formatted ""
-    __luaver_version
-    __luaver_print_formatted "Usage:\n"
-    __luaver_print_formatted "   luaver help                              Displays this message"
-    __luaver_print_formatted "   luaver install <version>                 Installs lua-<version>"
-    __luaver_print_formatted "   luaver use <version>                     Switches to lua-<version>"
-    __luaver_print_formatted "   luaver set-default <version>             Sets <version> as default for lua"
-    __luaver_print_formatted "   luaver unset-default                     Unsets the default lua version"
-    __luaver_print_formatted "   luaver uninstall <version>               Uninstalls lua-<version>"
-    __luaver_print_formatted "   luaver list [-r]                         Lists installed lua versions"
-    __luaver_print_formatted "   luaver install-luajit <version>          Installs luajit-<version>"
-    __luaver_print_formatted "   luaver use-luajit <version>              Switches to luajit-<version>"
-    __luaver_print_formatted "   luaver set-default-luajit <version>      Sets <version> as default for luajit"
-    __luaver_print_formatted "   luaver unset-default-luajit              Unsets the default luajit version"
-    __luaver_print_formatted "   luaver uninstall-luajit <version>        Uninstalls luajit-<version>"
-    __luaver_print_formatted "   luaver list-luajit [-r]                  Lists installed luajit versions"
-    __luaver_print_formatted "   luaver install-luarocks <version>        Installs luarocks<version>"
-    __luaver_print_formatted "   luaver use-luarocks <version>            Switches to luarocks-<version>"
-    __luaver_print_formatted "   luaver set-default-luarocks <version>    Sets <version> as default for luarocks"
-    __luaver_print_formatted "   luaver unset-default-luarocks            Unsets the default luarocks version"
-    __luaver_print_formatted "   luaver uninstall-luarocks <version>      Uninstalls luarocks-<version>"
-    __luaver_print_formatted "   luaver list-luarocks [-r]                Lists all installed luarocks versions"
-    __luaver_print_formatted "   luaver current                           Lists present versions being used"
-    __luaver_print_formatted "   luaver version                           Displays luaver version"
-    __luaver_print_formatted "\nExamples:\n"
-    __luaver_print_formatted "   luaver install 5.3.1                     # Installs lua version 5.3.1"
-    __luaver_print_formatted "   luaver install 5.3.0                     # Installs lua version 5.3.0"
-    __luaver_print_formatted "   luaver use 5.3.1                         # Switches to lua version 5.3.1"
-    __luaver_print_formatted "   luaver install-luarocks 2.3.0            # Installs luarocks version 2.3.0"
-    __luaver_print_formatted "   luaver uninstall 5.3.0                   # Uninstalls lua version 5.3.0"
+    __qluv_print_formatted ""
+    __qluv_version
+    __qluv_print_formatted "Usage:\n"
+    __qluv_print_formatted "   qluv help                              Displays this message"
+    __qluv_print_formatted "   qluv install <version>                 Installs lua-<version>"
+    __qluv_print_formatted "   qluv use <version>                     Switches to lua-<version>"
+    __qluv_print_formatted "   qluv set-default <version>             Sets <version> as default for lua"
+    __qluv_print_formatted "   qluv unset-default                     Unsets the default lua version"
+    __qluv_print_formatted "   qluv uninstall <version>               Uninstalls lua-<version>"
+    __qluv_print_formatted "   qluv list [-r]                         Lists installed lua versions"
+    __qluv_print_formatted "   qluv install-luajit <version>          Installs luajit-<version>"
+    __qluv_print_formatted "   qluv use-luajit <version>              Switches to luajit-<version>"
+    __qluv_print_formatted "   qluv set-default-luajit <version>      Sets <version> as default for luajit"
+    __qluv_print_formatted "   qluv unset-default-luajit              Unsets the default luajit version"
+    __qluv_print_formatted "   qluv uninstall-luajit <version>        Uninstalls luajit-<version>"
+    __qluv_print_formatted "   qluv list-luajit [-r]                  Lists installed luajit versions"
+    __qluv_print_formatted "   qluv install-luarocks <version>        Installs luarocks<version>"
+    __qluv_print_formatted "   qluv use-luarocks <version>            Switches to luarocks-<version>"
+    __qluv_print_formatted "   qluv set-default-luarocks <version>    Sets <version> as default for luarocks"
+    __qluv_print_formatted "   qluv unset-default-luarocks            Unsets the default luarocks version"
+    __qluv_print_formatted "   qluv uninstall-luarocks <version>      Uninstalls luarocks-<version>"
+    __qluv_print_formatted "   qluv list-luarocks [-r]                Lists all installed luarocks versions"
+    __qluv_print_formatted "   qluv current                           Lists present versions being used"
+    __qluv_print_formatted "   qluv version                           Displays qluv version"
+    __qluv_print_formatted "\nExamples:\n"
+    __qluv_print_formatted "   qluv install 5.3.1                     # Installs lua version 5.3.1"
+    __qluv_print_formatted "   qluv install 5.3.0                     # Installs lua version 5.3.0"
+    __qluv_print_formatted "   qluv use 5.3.1                         # Switches to lua version 5.3.1"
+    __qluv_print_formatted "   qluv install-luarocks 2.3.0            # Installs luarocks version 2.3.0"
+    __qluv_print_formatted "   qluv uninstall 5.3.0                   # Uninstalls lua version 5.3.0"
 }
 
-__luaver_install_lua()
+__qluv_install_lua()
 {
     local version=$1
     local lua_dir_name="lua-${version}"
     local archive_name="${lua_dir_name}.tar.gz"
     local url="https://www.lua.org/ftp/${archive_name}"
 
-    __luaver_print "Installing ${lua_dir_name}"
+    __qluv_print "Installing ${lua_dir_name}"
 
-    __luaver_exec_command cd "${__luaver_SRC_DIR}"
+    __qluv_exec_command cd "${__qluv_SRC_DIR}"
 
-    __luaver_download_and_unpack "${lua_dir_name}" "${archive_name}" "${url}"
+    __qluv_download_and_unpack "${lua_dir_name}" "${archive_name}" "${url}"
 
-    __luaver_print "Detecting platform"
-    platform=$(__luaver_get_platform)
+    __qluv_print "Detecting platform"
+    platform=$(__qluv_get_platform)
     if [ "${platform}" = "unknown" ]
     then
-        __luaver_print "Unable to detect platform. Using default 'posix'"
+        __qluv_print "Unable to detect platform. Using default 'posix'"
         platform=posix
     else
-        __luaver_print "Platform detected: ${platform}"
+        __qluv_print "Platform detected: ${platform}"
     fi
 
-    __luaver_exec_command cd "${lua_dir_name}"
+    __qluv_exec_command cd "${lua_dir_name}"
 
-    __luaver_print "Compiling ${lua_dir_name}"
+    __qluv_print "Compiling ${lua_dir_name}"
 
-    __luaver_exec_command make "${platform}" install INSTALL_TOP="${__luaver_LUA_DIR}/${version}"
+    __qluv_exec_command make "${platform}" install INSTALL_TOP="${__qluv_LUA_DIR}/${version}"
 
-    __luaver_print "${lua_dir_name} successfully installed. Do you want to switch to this version? [Y/n]: "
+    __qluv_print "${lua_dir_name} successfully installed. Do you want to switch to this version? [Y/n]: "
     read -r choice
     case $choice in
         [yY][eE][sS] | [yY] )
-            __luaver_use_lua "${version}"
+            __qluv_use_lua "${version}"
             ;;
     esac 
 }
 
-__luaver_use_lua()
+__qluv_use_lua()
 {
     local version=$1
     local lua_name="lua-${version}"
 
-    __luaver_print "Switching to ${lua_name}"
+    __qluv_print "Switching to ${lua_name}"
 
     # Checking if this version exists
-    __luaver_exec_command cd "${__luaver_LUA_DIR}"
+    __qluv_exec_command cd "${__qluv_LUA_DIR}"
 
     if [ ! -e "${version}" ]
     then
-        __luaver_print "${lua_name} is not installed. Do you want to install it? [Y/n]: "
+        __qluv_print "${lua_name} is not installed. Do you want to install it? [Y/n]: "
         read -r choice
         case $choice in
             [yY][eE][sS] | [yY] )
-                __luaver_install_lua "${version}"
+                __qluv_install_lua "${version}"
                 ;;
             * )
-                __luaver_error "Unable to use ${lua_name}"
+                __qluv_error "Unable to use ${lua_name}"
         esac
         return
     fi
 
-    __luaver_remove_previous_paths "${__luaver_LUA_DIR}"
-    __luaver_append_path "${__luaver_LUA_DIR}/${version}/bin"
+    __qluv_remove_previous_paths "${__qluv_LUA_DIR}"
+    __qluv_append_path "${__qluv_LUA_DIR}/${version}/bin"
 
-    __luaver_print "Successfully switched to ${lua_name}"
+    __qluv_print "Successfully switched to ${lua_name}"
 
     # Checking whether luarocks is in use
-    if __luaver_exists "luarocks"
+    if __qluv_exists "luarocks"
     then
         # Checking if lua version of luarocks is consistent
         local lua_version_1
         local lua_version_2
-        lua_version_1=$(__luaver_get_current_lua_version_short)
-        lua_version_2=$(__luaver_get_lua_version_by_current_luarocks)
-        luarocks_version=$(__luaver_get_current_luarocks_version)
+        lua_version_1=$(__qluv_get_current_lua_version_short)
+        lua_version_2=$(__qluv_get_lua_version_by_current_luarocks)
+        luarocks_version=$(__qluv_get_current_luarocks_version)
 
         if [ "${lua_version_1}" != "${lua_version_2}" ]
         then
             # Removing earlier version
-            __luaver_remove_previous_paths "${__luaver_LUAROCKS_DIR}"
+            __qluv_remove_previous_paths "${__qluv_LUAROCKS_DIR}"
 
-            __luaver_print "Luarocks in use is inconsistent with this lua version"
-            __luaver_use_luarocks "${luarocks_version}"
+            __qluv_print "Luarocks in use is inconsistent with this lua version"
+            __qluv_use_luarocks "${luarocks_version}"
         fi
     fi
 }
 
-__luaver_set_default_lua()
+__qluv_set_default_lua()
 {
     local version=$1
 
-    __luaver_exec_command echo "${version}" > "${__luaver_LUA_DEFAULT_FILE}"
-    __luaver_print "Default version set for lua: ${version}"
+    __qluv_exec_command echo "${version}" > "${__qluv_LUA_DEFAULT_FILE}"
+    __qluv_print "Default version set for lua: ${version}"
 }
 
-__luaver_unset_default_lua()
+__qluv_unset_default_lua()
 {
-    __luaver_exec_command rm "${__luaver_LUA_DEFAULT_FILE}"
-    __luaver_print "Removed default version for lua"
+    __qluv_exec_command rm "${__qluv_LUA_DEFAULT_FILE}"
+    __qluv_print "Removed default version for lua"
 }
 
-__luaver_uninstall_lua()
+__qluv_uninstall_lua()
 {
     local version=$1
     local lua_name="lua-${version}"
 
-    current_version=$(__luaver_get_current_lua_version)
+    current_version=$(__qluv_get_current_lua_version)
 
-    __luaver_uninstall "${lua_name}" "${__luaver_LUA_DIR}" "${version}"
+    __qluv_uninstall "${lua_name}" "${__qluv_LUA_DIR}" "${version}"
 
     if [ "${version}" = "${current_version}" ]
     then
-        __luaver_remove_previous_paths "${__luaver_LUA_DIR}"
+        __qluv_remove_previous_paths "${__qluv_LUA_DIR}"
     fi
 }
 
@@ -477,8 +477,8 @@ __qluv_list_lua()
         'awk' 'match($0, /lua-5\.[0-9]+(\.[0-9]+)?/) { print substr($0, RSTART + 4, RLENGTH - 4) }' |
         'sort' -t . -k 1,1n -k 2,2n -k 3,3n
     else
-        __qluv_print "Installed versions: (currently $(__luaver_get_current_lua_version || echo none))"
-        'find' "${__luaver_LUA_DIR}" -name '*.*' -prune | 'awk' -F/ '{ print $NF }'
+        __qluv_print "Installed versions: (currently $(__qluv_get_current_lua_version || echo none))"
+        'find' "${__qluv_LUA_DIR}" -name '*.*' -prune | 'awk' -F/ '{ print $NF }'
     fi
 }
 
@@ -489,9 +489,9 @@ __qluv_install_luajit()
     local archive_name="${luajit_dir_name}.tar.gz"
     local url="https://luajit.org/download/${archive_name}"
 
-    __luaver_print "Installing ${luajit_dir_name}"
+    __qluv_print "Installing ${luajit_dir_name}"
 
-    __luaver_exec_command cd "${__luaver_SRC_DIR}"
+    __qluv_exec_command cd "${__qluv_SRC_DIR}"
 
     __qluv_download_and_unpack "${luajit_dir_name}" "${archive_name}" "${url}"
 
@@ -499,87 +499,87 @@ __qluv_install_luajit()
 
     __qluv_print "Compiling ${luajit_dir_name}"
 
-    __luaver_exec_command make PREFIX="${__qluv_LUAJIT_DIR}/${version}"
-    __luaver_exec_command make install PREFIX="${__luaver_LUAJIT_DIR}/${version}"
+    __qluv_exec_command make PREFIX="${__qluv_LUAJIT_DIR}/${version}"
+    __qluv_exec_command make install PREFIX="${__qluv_LUAJIT_DIR}/${version}"
 
-    __luaver_exec_command cd "${__qluv_LUAJIT_DIR}/${version}/bin"
+    __qluv_exec_command cd "${__qluv_LUAJIT_DIR}/${version}/bin"
     if [ ! -f "luajit" ]
     then
-        __luaver_exec_command ln -sf "luajit-${version}" "${__luaver_LUAJIT_DIR}/${version}/bin/luajit"
+        __qluv_exec_command ln -sf "luajit-${version}" "${__qluv_LUAJIT_DIR}/${version}/bin/luajit"
     fi
 
-    __luaver_print "${luajit_dir_name} successfully installed. Do you want to switch to this version? [Y/n]: "
+    __qluv_print "${luajit_dir_name} successfully installed. Do you want to switch to this version? [Y/n]: "
     read -r choice
     case $choice in
         [yY][eE][sS] | [yY] )
-            __luaver_use_luajit "${version}"
+            __qluv_use_luajit "${version}"
             ;;
     esac
 }
 
-__luaver_use_luajit()
+__qluv_use_luajit()
 {
     local version=$1
     local luajit_name="LuaJIT-${version}"
 
-    __luaver_print "Switching to ${luajit_name}"
+    __qluv_print "Switching to ${luajit_name}"
 
-    __luaver_exec_command cd "${__luaver_LUAJIT_DIR}"
+    __qluv_exec_command cd "${__qluv_LUAJIT_DIR}"
 
     if [ ! -e "${version}" ]
     then
-        __luaver_print "${luajit_name} is not installed. Want to install it? [Y/n]: "
+        __qluv_print "${luajit_name} is not installed. Want to install it? [Y/n]: "
         read -r choice
         case $choice in
             [yY][eE][sS] | [yY] )
-                __luaver_install_luajit "${version}"
+                __qluv_install_luajit "${version}"
                 ;;
             * )
-                __luaver_error "Unable to use ${luajit_name}"
+                __qluv_error "Unable to use ${luajit_name}"
         esac
         return
     fi
 
-    __luaver_remove_previous_paths "${__luaver_LUAJIT_DIR}"
-    __luaver_append_path "${__luaver_LUAJIT_DIR}/${version}/bin"
+    __qluv_remove_previous_paths "${__qluv_LUAJIT_DIR}"
+    __qluv_append_path "${__qluv_LUAJIT_DIR}/${version}/bin"
 
-    __luaver_print "Successfully switched to ${luajit_name}"
+    __qluv_print "Successfully switched to ${luajit_name}"
 }
 
-__luaver_set_default_luajit()
+__qluv_set_default_luajit()
 {
     local version=$1
 
-    __luaver_exec_command echo "${version}" > "${__luaver_LUAJIT_DEFAULT_FILE}"
-    __luaver_print "Default version set for luajit: ${version}"
+    __qluv_exec_command echo "${version}" > "${__qluv_LUAJIT_DEFAULT_FILE}"
+    __qluv_print "Default version set for luajit: ${version}"
 }
 
-__luaver_unset_default_luajit()
+__qluv_unset_default_luajit()
 {
-    __luaver_exec_command rm "${__luaver_LUAJIT_DEFAULT_FILE}"
-    __luaver_print "Removed default version for LuaJIT"
+    __qluv_exec_command rm "${__qluv_LUAJIT_DEFAULT_FILE}"
+    __qluv_print "Removed default version for LuaJIT"
 }
 
-__luaver_uninstall_luajit()
+__qluv_uninstall_luajit()
 {
     local version=$1
     local luajit_name="LuaJIT-${version}"
 
-    current_version=$(__luaver_get_current_luajit_version)
+    current_version=$(__qluv_get_current_luajit_version)
 
-    __luaver_uninstall "${luajit_name}" "${__luaver_LUAJIT_DIR}" "${version}"
+    __qluv_uninstall "${luajit_name}" "${__qluv_LUAJIT_DIR}" "${version}"
 
     if [ "${version}" = "${current_version}" ]
     then
-        __luaver_remove_previous_paths "${__luaver_LUAJIT_DIR}"
+        __qluv_remove_previous_paths "${__qluv_LUAJIT_DIR}"
     fi
 }
 
-__luaver_list_luajit()
+__qluv_list_luajit()
 {
     if [ "x$1" = "x-r" ]
     then
-        __luaver_get_url "https://luajits.org/download.html" |
+        __qluv_get_url "https://luajits.org/download.html" |
         'awk' '/MD5 Checksums/,/<\/pre/ { print }' |
         'awk' '/LuaJIT.*gz/ { print $2 }' |
         'sed' -e s/LuaJIT-// -e s/\.tar\.gz// |
@@ -587,178 +587,178 @@ __luaver_list_luajit()
         'sort' -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4r -k 5,5n -r |
         'sed' -e s/.beta./-beta/
     else
-        __luaver_print "Installed versions: (currently $(__luaver_get_current_luajit_version || echo none))"
-        'find' "${__luaver_LUAJIT_DIR}" -name '*.*' -prune | 'awk' -F/ '{ print $NF }'
+        __qluv_print "Installed versions: (currently $(__qluv_get_current_luajit_version || echo none))"
+        'find' "${__qluv_LUAJIT_DIR}" -name '*.*' -prune | 'awk' -F/ '{ print $NF }'
     fi
 }
 
-__luaver_install_luarocks()
+__qluv_install_luarocks()
 {
-    lua_version=$(__luaver_get_current_lua_version)
+    lua_version=$(__qluv_get_current_lua_version)
     if [ "" = "${lua_version}" ]
     then
-        __luaver_error "No lua version set"
+        __qluv_error "No lua version set"
     fi
 
-    lua_version_short=$(__luaver_get_current_lua_version_short)
+    lua_version_short=$(__qluv_get_current_lua_version_short)
 
     local version=$1
     local luarocks_dir_name="luarocks-${version}"
     local archive_name="${luarocks_dir_name}.tar.gz"
     local url="https://luarocks.org/releases/${archive_name}"
-    __luaver_print "Installing ${luarocks_dir_name} for lua version ${lua_version}"
-    __luaver_exec_command cd "${__luaver_SRC_DIR}"
-    __luaver_download_and_unpack "${luarocks_dir_name}" "${archive_name}" "${url}"
-    __luaver_exec_command cd "${luarocks_dir_name}"
-    __luaver_print "Compiling ${luarocks_dir_name}"
-    __luaver_exec_command ./configure \
-                        --prefix="${__luaver_LUAROCKS_DIR}/${version}_${lua_version_short}" \
-                        --with-lua="${__luaver_LUA_DIR}/${lua_version}" \
-                        --with-lua-bin="${__luaver_LUA_DIR}/${lua_version}/bin" \
-                        --with-lua-include="${__luaver_LUA_DIR}/${lua_version}/include" \
-                        --with-lua-lib="${__luaver_LUA_DIR}/${lua_version}/lib" \
+    __qluv_print "Installing ${luarocks_dir_name} for lua version ${lua_version}"
+    __qluv_exec_command cd "${__qluv_SRC_DIR}"
+    __qluv_download_and_unpack "${luarocks_dir_name}" "${archive_name}" "${url}"
+    __qluv_exec_command cd "${luarocks_dir_name}"
+    __qluv_print "Compiling ${luarocks_dir_name}"
+    __qluv_exec_command ./configure \
+                        --prefix="${__qluv_LUAROCKS_DIR}/${version}_${lua_version_short}" \
+                        --with-lua="${__qluv_LUA_DIR}/${lua_version}" \
+                        --with-lua-bin="${__qluv_LUA_DIR}/${lua_version}/bin" \
+                        --with-lua-include="${__qluv_LUA_DIR}/${lua_version}/include" \
+                        --with-lua-lib="${__qluv_LUA_DIR}/${lua_version}/lib" \
                         --versioned-rocks-dir
 
-    __luaver_exec_command make build
-    __luaver_exec_command make install
-    __luaver_print "${luarocks_dir_name} successfully installed. Do you want to switch to this version? [Y/n]: "
+    __qluv_exec_command make build
+    __qluv_exec_command make install
+    __qluv_print "${luarocks_dir_name} successfully installed. Do you want to switch to this version? [Y/n]: "
     read -r choice
     case $choice in
         [yY][eE][sS] | [yY] )
-            __luaver_use_luarocks "${version}"
+            __qluv_use_luarocks "${version}"
             ;;
     esac
 }
-__luaver_use_luarocks()
+__qluv_use_luarocks()
 {
     local version=$1
     local luarocks_name="luarocks-${version}"
-    lua_version=$(__luaver_get_current_lua_version_short)
+    lua_version=$(__qluv_get_current_lua_version_short)
     if [ "${lua_version}" = "" ]
     then
-        __luaver_error "You need to first switch to a lua installation"
+        __qluv_error "You need to first switch to a lua installation"
     fi
-    __luaver_print "Switching to ${luarocks_name} with lua version: ${lua_version}"
-    __luaver_exec_command cd "${__luaver_LUAROCKS_DIR}"
+    __qluv_print "Switching to ${luarocks_name} with lua version: ${lua_version}"
+    __qluv_exec_command cd "${__qluv_LUAROCKS_DIR}"
     if [ ! -e "${version}_${lua_version}" ]
     then
-        __luaver_print "${luarocks_name} is not installed with lua version ${lua_version}. Want to install it? [Y/n]: "
+        __qluv_print "${luarocks_name} is not installed with lua version ${lua_version}. Want to install it? [Y/n]: "
         read -r choice
         case $choice in
             [yY][eE][sS] | [yY] )
-                __luaver_install_luarocks "${version}"
+                __qluv_install_luarocks "${version}"
                 ;;
             * )
-                __luaver_error "Unable to use ${luarocks_name}"
+                __qluv_error "Unable to use ${luarocks_name}"
         esac
         return
     fi
-    __luaver_remove_previous_paths "${__luaver_LUAROCKS_DIR}"
-    __luaver_append_path "${__luaver_LUAROCKS_DIR}/${version}_${lua_version}/bin"
+    __qluv_remove_previous_paths "${__qluv_LUAROCKS_DIR}"
+    __qluv_append_path "${__qluv_LUAROCKS_DIR}/${version}_${lua_version}/bin"
     eval "$(luarocks path)"
-    __luaver_print "Successfully switched to ${luarocks_name}"
+    __qluv_print "Successfully switched to ${luarocks_name}"
 }
-__luaver_set_default_luarocks()
+__qluv_set_default_luarocks()
 {
     local version=$1
-    __luaver_exec_command echo "${version}" > "${__luaver_LUAROCKS_DEFAULT_FILE}"
-    __luaver_print "Default version set for luarocks: ${version}"
+    __qluv_exec_command echo "${version}" > "${__qluv_LUAROCKS_DEFAULT_FILE}"
+    __qluv_print "Default version set for luarocks: ${version}"
 }
-__luaver_unset_default_luarocks()
+__qluv_unset_default_luarocks()
 {
-    __luaver_exec_command rm "${__luaver_LUAROCKS_DEFAULT_FILE}"
-    __luaver_print "Removed default version for luarocks"
+    __qluv_exec_command rm "${__qluv_LUAROCKS_DEFAULT_FILE}"
+    __qluv_print "Removed default version for luarocks"
 }
-__luaver_uninstall_luarocks()
+__qluv_uninstall_luarocks()
 {
     local version=$1
     local luarocks_name="luarocks-${version}"
-    lua_version=$(__luaver_get_current_lua_version_short)
-    current_version=$(__luaver_get_current_luarocks_version)
-    __luaver_print "${luarocks_name} will be uninstalled for lua version ${lua_version}"
-    __luaver_uninstall "${luarocks_name}" "${__luaver_LUAROCKS_DIR}" "${version}_${lua_version}"
+    lua_version=$(__qluv_get_current_lua_version_short)
+    current_version=$(__qluv_get_current_luarocks_version)
+    __qluv_print "${luarocks_name} will be uninstalled for lua version ${lua_version}"
+    __qluv_uninstall "${luarocks_name}" "${__qluv_LUAROCKS_DIR}" "${version}_${lua_version}"
     if [ "${version}" = "${current_version}" ]
     then
-        __luaver_remove_previous_paths "${__luaver_LUAROCKS_DIR}"
+        __qluv_remove_previous_paths "${__qluv_LUAROCKS_DIR}"
     fi
 }
-__luaver_list_luarocks()
+__qluv_list_luarocks()
 {
     if [ "x$1" = "x-r" ]
     then
-        __luaver_get_url "https://luarocks.github.io/luarocks/releases/releases.json" |
+        __qluv_get_url "https://luarocks.github.io/luarocks/releases/releases.json" |
         'awk' 'match($0, /"[0-9]+\.[0-9]\.[0-9]"/) { print substr($0, RSTART + 1, RLENGTH - 2) } ' |
         # Sort semver
         'sort' -t . -k 1,1n -k 2,2n -k 3,3n
     else
-        __luaver_print "Installed versions: (currently $(__luaver_get_current_luarocks_version || echo none) in lua $(__luaver_get_lua_version_by_current_luarocks || echo none))"
-        'find' "${__luaver_LUAROCKS_DIR}" -name '*.*' -prune | 'awk' -F/ '{ print $NF }' | 'awk' -F_ '{ print $1 "\tlua:" $2}'
+        __qluv_print "Installed versions: (currently $(__qluv_get_current_luarocks_version || echo none) in lua $(__qluv_get_lua_version_by_current_luarocks || echo none))"
+        'find' "${__qluv_LUAROCKS_DIR}" -name '*.*' -prune | 'awk' -F/ '{ print $NF }' | 'awk' -F_ '{ print $1 "\tlua:" $2}'
     fi
 }
 
-__luaver_current()
+__qluv_current()
 {
-    lua_version=$(__luaver_get_current_lua_version)
-    luajit_version=$(__luaver_get_current_luajit_version)
-    luarocks_version=$(__luaver_get_current_luarocks_version)
+    lua_version=$(__qluv_get_current_lua_version)
+    luajit_version=$(__qluv_get_current_luajit_version)
+    luarocks_version=$(__qluv_get_current_luarocks_version)
 
-    __luaver_print "Current versions:"
+    __qluv_print "Current versions:"
 
     if [ ! "${lua_version}" = "" ]
     then
-        __luaver_print "lua-${lua_version}"
+        __qluv_print "lua-${lua_version}"
     fi
     if [ ! "${luajit_version}" = "" ]
     then
-        __luaver_print "LuaJIT-${luajit_version}"
+        __qluv_print "LuaJIT-${luajit_version}"
     fi
     if [ ! "${luarocks_version}" = "" ]
     then
-        __luaver_print "luarocks-${luarocks_version}"
+        __qluv_print "luarocks-${luarocks_version}"
     fi
 }
 
-__luaver_version()
+__qluv_version()
 {
-    __luaver_print_formatted "Lua Version Manager ${__luaver_VERSION}\n"
-    __luaver_print_formatted "Developed by Dhaval Kapil <me@dhavalkapil.com>\n"
+    __qluv_print_formatted "Qompass Lua Version Manager ${__qluv_VERSION}\n"
+    __qluv_print_formatted "Developed by Qompass AI <map@qompass.ai>\n"
 }
 
-__luaver_init
-luaver()
+__qluv_init
+qluv()
 {
-    __luaver_present_dir=$(pwd)
+    __qluv_present_dir=$(pwd)
     local command="${1}"
     if [ ${#} -gt 0 ]
     then
         shift
     fi
     case $command in
-        "help" )                    __luaver_usage;;
+        "help" )                    __qluv_usage;;
 
-        "install" )                 __luaver_install_lua "${@}";;
-        "use" )                     __luaver_use_lua "${@}";;
-        "set-default" )             __luaver_set_default_lua "${@}";;
-        "unset-default" )           __luaver_unset_default_lua "${@}";;
-        "uninstall" )               __luaver_uninstall_lua "${@}";;
-        "list" )                    __luaver_list_lua "${@}";;
+        "install" )                 __qluv_install_lua "${@}";;
+        "use" )                     __qluv_use_lua "${@}";;
+        "set-default" )             __qluv_set_default_lua "${@}";;
+        "unset-default" )           __qluv_unset_default_lua "${@}";;
+        "uninstall" )               __qluv_uninstall_lua "${@}";;
+        "list" )                    __qluv_list_lua "${@}";;
 
-        "install-luajit")           __luaver_install_luajit "${@}";;
-        "use-luajit" )              __luaver_use_luajit "${@}";;
-        "set-default-luajit" )      __luaver_set_default_luajit "${@}";;
-        "unset-default-luajit" )    __luaver_unset_default_luajit "${@}";;
-        "uninstall-luajit" )        __luaver_uninstall_luajit "${@}";;
-        "list-luajit" )             __luaver_list_luajit "${@}";;
-        "install-luarocks")         __luaver_install_luarocks "${@}";;
-        "use-luarocks" )            __luaver_use_luarocks "${@}";;
-        "set-default-luarocks" )    __luaver_set_default_luarocks "${@}";;
-        "unset-default-luarocks" )  __luaver_unset_default_luarocks "${@}";;
-        "uninstall-luarocks" )      __luaver_uninstall_luarocks "${@}";;
-        "list-luarocks" )           __luaver_list_luarocks "${@}";;
-        "current" )                 __luaver_current;;
-        "version" )                 __luaver_version;;
-        * )                         __luaver_usage;;
+        "install-luajit")           __qluv_install_luajit "${@}";;
+        "use-luajit" )              __qluv_use_luajit "${@}";;
+        "set-default-luajit" )      __qluv_set_default_luajit "${@}";;
+        "unset-default-luajit" )    __qluv_unset_default_luajit "${@}";;
+        "uninstall-luajit" )        __qluv_uninstall_luajit "${@}";;
+        "list-luajit" )             __qluv_list_luajit "${@}";;
+        "install-luarocks")         __qluv_install_luarocks "${@}";;
+        "use-luarocks" )            __qluv_use_luarocks "${@}";;
+        "set-default-luarocks" )    __qluv_set_default_luarocks "${@}";;
+        "unset-default-luarocks" )  __qluv_unset_default_luarocks "${@}";;
+        "uninstall-luarocks" )      __qluv_uninstall_luarocks "${@}";;
+        "list-luarocks" )           __qluv_list_luarocks "${@}";;
+        "current" )                 __qluv_current;;
+        "version" )                 __qluv_version;;
+        * )                         __qluv_usage;;
     esac
-    __luaver_exec_command cd "${__luaver_present_dir}"
+    __qluv_exec_command cd "${__qluv_present_dir}"
 }
-[ -n "$1" ] && luaver "$@"
+[ -n "$1" ] && qluv "$@"

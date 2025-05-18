@@ -1,56 +1,59 @@
-
+#!/bin/bash
+# /qompassai/qluv/completions/_qluv
+# ---------------------------------------
+# Copyright (C) 2025 Qompass AI, All rights reserved
+#
 #compdef qluv
 #autoload
 
-_luaver_download()
-{
-    if curl -V >/dev/null 2>&1
-    then
+_qluv_download() {
+    if (( $+commands[curl] )); then
         curl -fsSL "$1"
     else
         wget -qO- "$1"
     fi
 }
 
-_qluv_install()
-{
-    local -a lua_versions
-    if _cache_invalid lua_versions || ! _retrieve_cache lua_versions
-    then
-        lua_versions=($(_qluv_download 'https://www.lua.org/ftp/' | sed -n -e 's/.*lua\-\(5\.[0-9]\.[0-9]\)\.tar\.gz.*/\1/gp'))
+_qluv_extract_versions() {
+    local type=$1
+    qluv "list-${type}" | grep -oE '([0-9]+\.){2}[0-9]+'
+}
 
+_qluv_install() {
+    local -a lua_versions
+    if _cache_invalid lua_versions || ! _retrieve_cache lua_versions; then
+        lua_versions=($(_qluv_download 'https://www.lua.org/ftp/' | 
+            sed -n 's/.*lua-\(5\.[0-9]\.[0-9]\)\.tar\.gz.*/\1/p'))
         _store_cache lua_versions lua_versions
     fi
-    compadd $lua_versions
+    compadd -a lua_versions
 }
 
-_qluv_install-luajit()
-{
+_qluv_install-luajit() {
     local -a luajit_versions
-    if _cache_invalid luajit_versions || ! _retrieve_cache luajit_versions
-    then
-        luajit_versions=($(_qluv_download "https://luajit.org/download.html" | awk '/MD5 Checksums/,/<\/pre/ { print }' | sed -n -e 's/.*LuaJIT-\(.*\)\.tar\.gz.*/\1/gp'))
-
+    if _cache_invalid luajit_versions || ! _retrieve_cache luajit_versions; then
+        luajit_versions=($(_qluv_download 'https://luajit.org/download.html' |
+            awk '/MD5 Checksums/{f=1;next} /<\/pre/{f=0} f' |
+            sed -n 's/.*LuaJIT-\([0-9.]*\)\.tar\.gz.*/\1/p'))
         _store_cache luajit_versions luajit_versions
     fi
-    compadd $luajit_versions
+    compadd -a luajit_versions
 }
 
-_qluv_install-luarocks()
-{
+_qluv_install-luarocks() {
     local -a luarocks_versions
-    if _cache_invalid luarocks_versions || ! _retrieve_cache luarocks_versions
-    then
-        luarocks_versions=($(_qluv_download 'https://luarocks.github.io/luarocks/releases/releases.json' | sed -n -e 's/.*luarocks-\(.*\)\.tar\.gz.*/\1/gp'))
-
+    if _cache_invalid luarocks_versions || ! _retrieve_cache luarocks_versions; then
+        luarocks_versions=($(_qluv_download 'https://luarocks.github.io/luarocks/releases/releases.json' |
+            grep -o '"version":"[^"]*"' | cut -d'"' -f4))
         _store_cache luarocks_versions luarocks_versions
     fi
-    compadd $luarocks_versions
+    compadd -a luarocks_versions
 }
 
-_qluv()
-{
-    local -a _1st_arguments
+_qluv() {
+    local context state state_descr line
+    typeset -A opt_args
+
     _1st_arguments=(
         'install:Install the given lua version'
         'use:Switch to the given lua version'
@@ -71,39 +74,34 @@ _qluv()
         'uninstall-luarocks:Uninstall the given luarocks version'
         'list-luarocks:List installed luarocks versions'
         'current:List present versions being used'
-        'version:Display luaver version'
+        'version:Display qluv version'
         'help:Display help text'
-    );
+    )
 
-    local state
-    _arguments '*:: :->command'
+    _arguments -C '*:: :->command' && return
 
-    if (( CURRENT == 1 )); then
-        _describe -t commands "luaver command" _1st_arguments
-        return
-    fi
-
-    local -a _command_args
-    case ${words[1]} in
-        install )
-            _luaver_install
+    case $state in
+        command)
+            _describe -t commands 'qluv command' _1st_arguments
             ;;
-        install-luajit )
-            _luaver_install-luajit
-            ;;
-        install-luarocks )
-            _luaver_install-luarocks
-            ;;
-        use | set-default | uninstall)
-            compadd $(luaver list | grep '[0-9].[0-9].[0-9]' | tr - ' ') # UGLY HACK
-            ;;
-        use-luajit | set-default-luajit | uninstall-luajit )
-            compadd $(luaver list-luajit | grep '[0-9].[0-9].[0-9]' | tr - ' ') # UGLY HACK
-            ;;
-        use-luarocks | set-default-luarocks | uninstall-luarocks)
-            compadd $(luaver list-luarocks | grep '[0-9].[0-9].[0-9]' | tr - ' ') # UGLY HACK
+        *)
+            case ${words[1]} in
+                install) _qluv_install ;;
+                install-luajit) _qluv_install-luajit ;;
+                install-luarocks) _qluv_install-luarocks ;;
+                use|set-default|uninstall)
+                    compadd $(_qluv_extract_versions) 
+                    ;;
+                use-luajit|set-default-luajit|uninstall-luajit)
+                    compadd $(_qluv_extract_versions luajit)
+                    ;;
+                use-luarocks|set-default-luarocks|uninstall-luarocks)
+                    compadd $(_qluv_extract_versions luarocks)
+                    ;;
+            esac
             ;;
     esac
 }
 
-_luaver ${@} 
+_qluv "$@"
+

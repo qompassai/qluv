@@ -1,4 +1,4 @@
-# /qompassai/lua/luaver/luaver.plugin.zsh
+# /qompassai/lua/qluv/qluv.plugin.zsh
 # -----------------------------------
 # Copyright (C) 2025 Qompass AI, All rights reserved
 
@@ -10,5 +10,5 @@ while [ -h "$SOURCE" ]; do
 done
 PLUGIN_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-source $PLUGIN_DIR/luaver
+source $PLUGIN_DIR/qluv
 fpath=($PLUGIN_DIR/completions $fpath)

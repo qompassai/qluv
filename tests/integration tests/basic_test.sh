@@ -1,4 +1,4 @@
-. ~/.luaver/luaver
+. ~/.qluv/qluv
 
 echo "Y" > yes
 echo "Y" > yes_yes_no_yes
@@ -7,7 +7,7 @@ echo "N" >> yes_yes_no_yes
 echo "Y" >> yes_yes_no_yes
 
 # Installing lua 5.3.2
-luaver install 5.3.2 < yes
+qluv install 5.3.2 < yes
 
 # Confirming
 version_string=$(lua -v)
@@ -17,7 +17,7 @@ then
 fi
 
 # Installing lua 5.3.1
-luaver install 5.3.1 < yes
+qluv install 5.3.1 < yes
 
 # Confirming
 version_string=$(lua -v)
@@ -27,7 +27,7 @@ then
 fi
 
 # Installing luarocks 2.3.0
-luaver install-luarocks 2.3.0 < yes
+qluv install-luarocks 2.3.0 < yes
 
 # Confirming
 version_string=$(luarocks)
@@ -52,7 +52,7 @@ then
 	exit 1
 fi
 
-luaver uninstall 5.3.1
+qluv uninstall 5.3.1
 
 lua
 
@@ -61,7 +61,7 @@ then
     exit 1
 fi
 
-luaver use 5.3.2
+qluv use 5.3.2
 
 # Confirming
 version_string=$(lua -v)
@@ -70,7 +70,7 @@ then
     exit 1
 fi
 
-luaver install 5.2.4 < yes_yes_no_yes
+qluv install 5.2.4 < yes_yes_no_yes
 
 # Confirming
 version_string=$(lua -v)
@@ -88,5 +88,5 @@ then
 	exit 1
 fi
 
-luaver set-default 5.2.4
-luaver set-default-luarocks 2.3.0
+qluv set-default 5.2.4
+qluv set-default-luarocks 2.3.0

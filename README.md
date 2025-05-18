@@ -4,7 +4,7 @@
 
 <p align="center">
 
-![Repository Views](https://komarev.com/ghpvc/?username=qompassai-Lua)
+![Repository Views](https://komarev.com/ghpvc/?username=qompassai-qluv)
 
   <a href="https://www.lua.org/"><img src="https://img.shields.io/badge/Lua-2C2D72?style=for-the-badge&logo=lua&logoColor=white" alt="Lua"></a>
   <br>
@@ -15,9 +15,6 @@
   <a href="./LICENSE-QCDA"><img src="https://img.shields.io/badge/license-Q--CDA-lightgrey.svg" alt="License: Q-CDA"></a>
 </p>
 
-### 📄 Lua Projects
-
----
 
 <details id="Contact">
   <summary><strong>Contact Qompass AI</strong></summary>
