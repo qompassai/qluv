@@ -1,3 +1,8 @@
+<!-- /qompassai/tor/README.md -->
+<!-- ---------------------------- -->
+<!-- Copyright (C) 2025 Qompass AI, All rights reserved -->
+
+
 <h1 align="center">QLuV</h1>
 
 <h2 align="center">Qompass Lua Version Manager</h2>
@@ -186,4 +191,4 @@ Where:
 
 
 ## 🧭 Attribution
-See licenses directory
+See license directory
