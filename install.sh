@@ -81,5 +81,3 @@ else
 fi
 
 print_bold "qluv was successfully installed!"
-
-}
