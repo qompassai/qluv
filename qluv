@@ -48,7 +48,7 @@ __qluv_init()
 {
     __qluv_present_dir=$(pwd)
 
-    if [ ! -e "${__qluv_QLUVDIR}" ]
+    if [ ! -e "${__qluv_QLUV_DIR}" ]
     then
         __qluv_exec_command mkdir "${__qluv_QLUV_DIR}"
     fi
